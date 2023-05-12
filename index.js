@@ -13,6 +13,7 @@ import swaggerJsdoc  from 'swagger-jsdoc';
 import swaggerUI from 'swagger-ui-express';
 
 import userRoutes from './api/routes/user.js';
+import instaRoutes from './api/routes/instagram.js';
 
 const app = express();
 
@@ -43,6 +44,7 @@ dbConnect()
 	});
 
 app.use('/user', userRoutes);
+app.use('/instagram', instaRoutes);
 
 app.listen(process.env.PORT || 3000);
 

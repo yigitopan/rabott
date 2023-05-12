@@ -18,6 +18,7 @@
     "url": "https://github.com/yigitopan/rabott"
   },
   "dependencies": {
+    "axios": "^1.4.0",
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.2",
     "chai-http": "^4.3.0",
