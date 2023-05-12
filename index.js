@@ -14,6 +14,7 @@ import swaggerUI from 'swagger-ui-express';
 
 import userRoutes from './api/routes/user.js';
 import instaRoutes from './api/routes/instagram.js';
+import scrapRoutes from './api/routes/scrap.js';
 
 const app = express();
 
@@ -45,6 +46,7 @@ dbConnect()
 
 app.use('/user', userRoutes);
 app.use('/instagram', instaRoutes);
+app.use('/scrap', scrapRoutes);
 
 app.listen(process.env.PORT || 3000);
 

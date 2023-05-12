@@ -1,10 +1,23 @@
 /* eslint-disable max-len */
 import axios from 'axios';
+import fs from 'fs';
+let path = require('path');
+
 require('dotenv').config();
 
 class InstagramService {
 
 	static async publish(req, res) {
+		// Read the image file
+		let jsonPath = path.join(__dirname, '..', '..', 'lorem.png');
+
+		console.log(__dirname);
+		const imageData = fs.readFileSync(jsonPath);
+
+		// Convert image data to base64
+		// eslint-disable-next-line no-unused-vars
+		const base64Image = Buffer.from(imageData).toString('base64');
+
 		try {
 			let data = JSON.stringify({
 				image_url: 'https://upload.wikimedia.org/wikipedia/commons/b/b6/Lorem_Ipsum.png',
@@ -41,6 +54,7 @@ class InstagramService {
 
 					axios.request(config_container)
 						.then(() => {
+							
 						})
 						.catch((error) => {
 							console.log(error);
@@ -50,10 +64,9 @@ class InstagramService {
 				.catch((error) => {
 					console.log(error);
 				});
-	  
-		  // Hash the password
-	  
-		  // Create a new user record in the database
+		  
+			res.status(200);
+			return { type: true, message: 'Posted successfully' };
 	  
 		}
 		catch (error) {
