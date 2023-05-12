@@ -1,16 +1,47 @@
 {
-  "name": "rabott",
+  "name": "hospital-api",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "babel-node index.js",
+    "test": "sequelize db:migrate:undo:all && sequelize db:migrate && sequelize db:seed:all && mocha api/test --require babel-register -r dotenv/config"
   },
-  "keywords": [],
+  "repository": {
+    "start": "nodemon --exec babel-node index.js",
+    "type": "git",
+    "url": "git+https://github.com/yigitopan/rabott"
+  },
   "author": "",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yigitopan/rabott"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "body-parser": "^1.20.2",
+    "chai-http": "^4.3.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "joi": "^17.9.2",
+    "jsonwebtoken": "^9.0.0",
+    "mongodb": "^5.5.0",
+    "mongoose": "^7.1.1",
+    "nodemon": "^2.0.22",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^4.6.3"
+  },
   "devDependencies": {
-    "@types/node": "^18.11.18",
-    "typescript": "^4.9.5"
+    "@babel/core": "^7.21.4",
+    "@babel/eslint-parser": "^7.21.3",
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
+    "chai": "^4.3.7",
+    "eslint": "^8.24.0",
+    "mocha": "^10.2.0",
+    "sinon": "^15.0.4"
   }
 }
