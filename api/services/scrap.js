@@ -11,7 +11,7 @@ class ScrapService {
 
 		const images = await page.$$('#sos-category__grid-topangebote .cor-offer-renderer-tile__content .cor-offer-image img'); //img element, i want to save its src
 		const titles = await page.$$('#sos-category__grid-topangebote .cor-offer-renderer-tile__content .cor-offer-information .cor-offer-information__title a.cor-offer-information__title-link'); //we did it, it was a text inside a
-		const descriptions = await page.$$('#sos-category__grid-topangebote .cor-offer-renderer-tile__content .cor-offer-information .cor-offer-information'); // i recently asked about this. each '.cor-offer-information' has multiple span elements and we want to concat 
+		const descriptions = await page.$$('#sos-category__grid-topangebote .cor-offer-renderer-tile__content .cor-offer-information'); // i recently asked about this. each '.cor-offer-information' has multiple span elements and we want to concat 
 		const prices = await page.$$('#sos-category__grid-topangebote .cor-offer-renderer-tile__footer .cor-offer-price__tag-price'); //just a div with text inside
 
 		const offers = [];
@@ -27,10 +27,8 @@ class ScrapService {
 			for (let j = 0;j < additionalElements.length;j++) {
 				const additionalElement = additionalElements[j];
 				const text = await additionalElement.evaluate(node => node.textContent.trim());
-				description += text + ', ';
+				description += text; 
 			}
-			
-			description = description.slice(0, -2); // Remove the trailing comma and space
 
 			const discountObject = {
 				image_url: image,
