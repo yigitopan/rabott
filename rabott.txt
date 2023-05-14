@@ -1,0 +1,18 @@
+https://developers.facebook.com/docs/instagram-api/guides/content-publishing
+
+böyle 1 post atabildik
+
+graph api explorer ile
+
+
+https://stackoverflow.com/questions/46514010/facebook-ids-for-pages-returns-an-owning-business-is-required
+ise yaaradı
+
+
+ilk istek POST
+17841458431422614/media?image_url=https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Lorem-Ipsum-Tekst.jpg/1200px-Lorem-Ipsum-Tekst.jpg&caption=#BronzFonz
+
+
+sonra container id dönüyor
+ikinci istek:
+17841458431422614/media_publish?creation_id=CONTAINERID

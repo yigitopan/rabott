@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "babel-node index.js",
+    "start": "nodemon index.js --exec babel-node",
     "test": "sequelize db:migrate:undo:all && sequelize db:migrate && sequelize db:seed:all && mocha api/test --require babel-register -r dotenv/config"
   },
   "repository": {
@@ -22,6 +22,7 @@
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.2",
     "chai-http": "^4.3.0",
+    "cloudinary": "^1.36.4",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
@@ -31,9 +32,11 @@
     "mongodb": "^5.5.0",
     "mongoose": "^7.1.1",
     "nodemon": "^2.0.22",
+    "promise": "^8.3.0",
     "puppeteer": "^20.2.0",
     "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^4.6.3"
+    "swagger-ui-express": "^4.6.3",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.21.4",

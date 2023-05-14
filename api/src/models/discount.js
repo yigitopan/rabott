@@ -1,7 +1,6 @@
-const mongoose = require('mongoose');
-const discountItemSchema = require('./discountSchema');
+import { Schema, model } from 'mongoose';
 
-const discountSchema = new mongoose.Schema({
+const discountSchema = new Schema({
   supermarket: {
     type: String,
     required: true
@@ -14,9 +13,27 @@ const discountSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  discountItems: [discountItemSchema]
+  discountItems: [{
+        product: {
+          type: String,
+          required: true
+        },
+        description: {
+          type: String,
+          required: false
+        },
+        img_url: {
+          type: String,
+          required: true
+        },
+        price: {
+          type: String,
+          required: true
+        }
+  }]
 });
 
-const Discount = mongoose.model('Discount', discountSchema);
+
+const Discount = model('Discount', discountSchema);
 
 module.exports = Discount;

@@ -1,8 +1,26 @@
 import puppeteer from 'puppeteer';
+import Discount from '../src/models/discount';
 
 class ScrapService {
 
-	static async scrap(req, res) {
+	static async isDiscountExists(supermarket, period) {
+		const existingDiscount = await Discount.findOne({ supermarket, period });
+		return existingDiscount !== null;
+	  }
+
+	static formatDate(date) {
+		let day = date.getDate();
+		let month = date.getMonth() + 1; // January is 0
+		let year = date.getFullYear();
+	  
+		// Add leading zeros if necessary
+		day = day < 10 ? `0${day}` : day;
+		month = month < 10 ? `0${month}` : month;
+	  
+		return `${day}.${month}.${year}`;
+	  }
+
+	static async rewe(req, res) {
 		const browser = await puppeteer.launch();
 		const page = await browser.newPage();
 		await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36');
@@ -14,7 +32,7 @@ class ScrapService {
 		const descriptions = await page.$$('#sos-category__grid-topangebote .cor-offer-renderer-tile__content .cor-offer-information'); // i recently asked about this. each '.cor-offer-information' has multiple span elements and we want to concat 
 		const prices = await page.$$('#sos-category__grid-topangebote .cor-offer-renderer-tile__footer .cor-offer-price__tag-price'); //just a div with text inside
 
-		const offers = [];
+		const discountItems = [];
 
 		for (let i = 0;i < images.length;i++) {
 			const image = await images[i].evaluate(node => node.getAttribute('src'));
@@ -30,24 +48,48 @@ class ScrapService {
 				description += text; 
 			}
 
-			const discountObject = {
-				image_url: image,
-				title,
-				description,
-				price
-			};
+			const discountItem = {
+				product: title,
+				description: description,
+				img_url: image,
+				price: price
+			  };
 
-			offers.push(discountObject);
+			  discountItems.push(discountItem);
+		}
+	
+		  let dt = new Date(); // current date of week
+		let currentWeekDay = dt.getDay();
+		let lessDays = currentWeekDay === 0 ? 6 : currentWeekDay - 1;
+		let wkStart = new Date(new Date(dt).setDate(dt.getDate() - lessDays));
+		let wkEnd = new Date(new Date(wkStart).setDate(wkStart.getDate() + 6));
+	
+		let formattedStartDate = this.formatDate(wkStart); // Format start date
+		let formattedEndDate = this.formatDate(wkEnd); // Format end date
+	
+		let validityString = `Gültig ab ${formattedStartDate} bis ${formattedEndDate}`;
+		console.log(validityString);
+
+		const discount = new Discount({
+			supermarket: 'rewe',
+			header: 'Topangebote',
+			period: validityString,
+			discountItems: discountItems
+		  });
+
+		await browser.close();
+		const exists = await this.isDiscountExists(discount.supermarket, discount.period);
+
+		if (!exists) {
+			await discount.save();
+			res.status(200);
+			return { type: true, data: discount, message: 'Discount saved in DB' };		
+		}
+		else {
+			res.status(400);
+			return { type: false, data: {}, message: 'Discount already available' };
 		}
 
-		console.log(offers);
-
-		await browser.close();
-
-		await browser.close();
-		  
-		res.status(200);
-		return { type: true, data: offers, message: 'User signed up successfully' };
 	  }
 
 }

@@ -2,9 +2,9 @@ import ScrapService from '../services/scrap';
 
 class Scrap {
 
-	static async scrap(req, res) {
+	static async rewe(req, res) {
 		try {
-			const result = await ScrapService.scrap(req, res);
+			const result = await ScrapService.rewe(req, res);
 			if (result.type) {
 				return res.json({ data: result.data, type: true, message: result.message });
 			}

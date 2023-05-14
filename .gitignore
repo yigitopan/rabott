@@ -1,3 +1,4 @@
 node_modules
 .env
 api/src/config/config.js
+images

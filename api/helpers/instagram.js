@@ -3,19 +3,19 @@ import axios from 'axios';
 
 require('dotenv').config();
 
-class InstagramService {
+class InstagramPoster {
 
-	static async publish(req, res) {
+	static async publish(urls) {
 
 		const containerIDs = [];
 
 		// Read the image file
 
 		try {
-			for (let index = 0;index < 6;index++) {
+			for (let index = 0;index < urls.length;index++) {
 				
 				let data = JSON.stringify({
-			  image_url: 'http://localhost:3000/1.png',
+			  image_url: urls[index],
 			  is_carousel_item: true,
 			  access_token: process.env.INSTA_TOKEN
 				});
@@ -78,7 +78,6 @@ class InstagramService {
 		  }
 		catch (error) {
 			console.error(error);
-			res.status(500);
 			return { type: false, message: 'Error' };
 		  }
 		  
@@ -86,5 +85,5 @@ class InstagramService {
 
 }
 
-export default InstagramService;
+export default InstagramPoster;
 
