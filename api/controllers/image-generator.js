@@ -8,9 +8,14 @@ class ImageGenerator {
 
 	static async generate(req, res) {
 		try {
-			const discount = await Discount.findOne().sort({ _id: -1 }).limit(1);
-			const promises = discount.discountItems.map((di, i) =>
-				ImageGeneratorService.generate(discount, i)
+			const lastDiscount = await Discount.findOne({ posted: false }).sort({ _id: -1 }).limit(1);
+			const lastSupermarket = lastDiscount.supermarket;
+			console.log(lastDiscount);
+			console.log(lastSupermarket);
+			const discounts = await Discount.find({ posted: false, supermarket: lastSupermarket }).limit(10);
+
+			const promises = discounts.map((di, i) =>
+				ImageGeneratorService.generate(di, i)
 			);
 
 			const results = await Promise.all(promises);

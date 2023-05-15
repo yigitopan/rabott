@@ -5,32 +5,31 @@ const discountSchema = new Schema({
     type: String,
     required: true
   },
-  header: {
-    type: String,
-    required: true
-  },
   period: {
     type: String,
     required: true
   },
-  discountItems: [{
-        product: {
-          type: String,
-          required: true
-        },
-        description: {
-          type: String,
-          required: false
-        },
-        img_url: {
-          type: String,
-          required: true
-        },
-        price: {
-          type: String,
-          required: true
-        }
-  }]
+  product: {
+    type: String,
+    required: true
+  },
+  description: {
+    type: String,
+    required: false
+  },
+  img_url: {
+    type: String,
+    required: true
+  },
+  price: {
+    type: String,
+    required: true
+  },
+  posted: {
+    type: Boolean,
+    required:true,
+    default: false
+  }
 });
 
 

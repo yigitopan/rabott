@@ -3,8 +3,8 @@ import Discount from '../src/models/discount';
 
 class ScrapService {
 
-	static async isDiscountExists(supermarket, period) {
-		const existingDiscount = await Discount.findOne({ supermarket, period });
+	static async isDiscountExists(product, period) {
+		const existingDiscount = await Discount.findOne({ product, period });
 		return existingDiscount !== null;
 	  }
 
@@ -49,16 +49,19 @@ class ScrapService {
 			}
 
 			const discountItem = {
+				supermarket: 'rewe',
+				period: '',
 				product: title,
 				description: description,
 				img_url: image,
-				price: price
+				price: price,
+				posted: false
 			  };
 
 			  discountItems.push(discountItem);
 		}
 	
-		  let dt = new Date(); // current date of week
+		let dt = new Date(); // current date of week
 		let currentWeekDay = dt.getDay();
 		let lessDays = currentWeekDay === 0 ? 6 : currentWeekDay - 1;
 		let wkStart = new Date(new Date(dt).setDate(dt.getDate() - lessDays));
@@ -68,22 +71,33 @@ class ScrapService {
 		let formattedEndDate = this.formatDate(wkEnd); // Format end date
 	
 		let validityString = `Gültig ab ${formattedStartDate} bis ${formattedEndDate}`;
-		console.log(validityString);
 
-		const discount = new Discount({
-			supermarket: 'rewe',
-			header: 'Topangebote',
-			period: validityString,
-			discountItems: discountItems
-		  });
+		discountItems.forEach(async di => {
+			
+			const discount = new Discount({
+				supermarket: di.supermarket,
+				period: validityString,
+				product: di.product,
+				description: di.description,
+				img_url: di.img_url,
+				price: di.price,
+				posted: di.posted
+			  });
+
+			  const exists = await this.isDiscountExists(discount.product, discount.period);
+
+			  if (!exists) {
+				await discount.save();
+			  }
+
+		});
 
 		await browser.close();
-		const exists = await this.isDiscountExists(discount.supermarket, discount.period);
+		const exists = false;
 
 		if (!exists) {
-			await discount.save();
 			res.status(200);
-			return { type: true, data: discount, message: 'Discount saved in DB' };		
+			return { type: true, data: 5, message: 'Discounts saved in DB' };		
 		}
 		else {
 			res.status(400);

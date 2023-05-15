@@ -3,10 +3,10 @@ import supermarketLogos from '../../supermarkets/logos';
 
 class ImageGeneratorService {
 
-	static generateHTML(discount, i) {
+	static generateHTML(discount) {
 
 		const supermarketLogo = supermarketLogos.rewe;
-		const discountItem = discount.discountItems[i];
+		const discountItem = discount;
 		const hasDescription = true;
 	  
 		return `
@@ -104,11 +104,13 @@ class ImageGeneratorService {
 			await page.setViewport({ width: 1200, height: 1200 });
 		  
 			  await page.goto('about:blank');
-			  await page.setContent(this.generateHTML(discount, index),  { waitUntil: 'networkidle0' });
+			  await page.setContent(this.generateHTML(discount),  { waitUntil: 'networkidle0' });
 			// Take a screenshot of the page
 			await page.screenshot({ path: `images/${index}.png` });
 		  
-			// Close the browser
+			discount.posted = true;
+			await discount.save();
+			
 			await browser.close();
 
 			return { type: true, data: 5, message: 'Screenshot taken' };
