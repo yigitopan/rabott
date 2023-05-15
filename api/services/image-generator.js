@@ -5,9 +5,13 @@ class ImageGeneratorService {
 
 	static generateHTML(discount) {
 
-		const supermarketLogo = supermarketLogos.rewe;
+		const supermarketLogo = supermarketLogos.lidl;
 		const discountItem = discount;
-		const hasDescription = true;
+		let hasDescription = false;
+
+		if (discountItem.description.length>3) {
+			hasDescription = true;
+		}
 	  
 		return `
 		<!DOCTYPE html>
@@ -88,7 +92,7 @@ class ImageGeneratorService {
 			<div class="discount-img"></div>
 			<div class="period">${discount.period}</div>
 			<p class="discount-title">${discountItem.product}</p>
-			${hasDescription ? `<p class="discount-description">${discountItem.description}</p>` : ''}
+			${hasDescription ? `<p class="discount-description">${discountItem.description}</p>` : '<p style="display:none;"></p>'}
 			<p class="discount-price">${discountItem.price}</p>
 		  </div>
 		</body>

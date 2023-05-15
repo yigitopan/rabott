@@ -86,4 +86,3 @@ class InstagramPoster {
 }
 
 export default InstagramPoster;
-

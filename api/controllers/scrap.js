@@ -17,6 +17,21 @@ class Scrap {
 		}
 	}
 
+	static async lidl(req, res) {
+		try {
+			const result = await ScrapService.lidl(req, res);
+			if (result.type) {
+				return res.json({ data: result.data, type: true, message: result.message });
+			}
+			else {
+				return res.json({ type: false, message: result.message });
+			}
+		}
+		catch (error) {
+			return res.json({ type: false, message: error.message });
+		}
+	}
+
 }
 
 export default Scrap;

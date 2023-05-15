@@ -14,7 +14,7 @@ class Instagram {
 			}
 		}
 		catch (error) {
-			return res.json({ type: false, message: error.message });
+			return res.json({ type: false, error: error });
 		}
 	}
 
