@@ -37,7 +37,7 @@ class InstagramPoster {
 
 			/////////////////////
 			let cData = JSON.stringify({
-				caption: '#rabatt #rewe #aldi #edeka #lidl',
+				caption: 'just another one',
 				media_type: 'CAROUSEL',
 				children: containerIDs,
 				access_token: process.env.INSTA_TOKEN

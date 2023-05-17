@@ -5,7 +5,7 @@ class ImageGeneratorService {
 
 	static generateHTML(discount) {
 
-		const supermarketLogo = supermarketLogos.lidl;
+		const supermarketLogo = supermarketLogos[discount.supermarket];
 		const discountItem = discount;
 		let hasDescription = false;
 

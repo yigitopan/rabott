@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 import puppeteer from 'puppeteer';
 import Discount from '../src/models/discount';
+import axios from 'axios';
 
 class ScrapService {
 
@@ -221,6 +222,59 @@ class ScrapService {
 			return { type: false, data: discountItems, message: 'Discount already available' };
 		}
 
+	}
+
+	static async edeka(req, res) {
+		try {
+		  let dt = new Date(); // current date of week
+		  let currentWeekDay = dt.getDay();
+		  let lessDays = currentWeekDay === 0 ? 6 : currentWeekDay - 1;
+		  let wkStart = new Date(new Date(dt).setDate(dt.getDate() - lessDays));
+		  let wkEnd = new Date(new Date(wkStart).setDate(wkStart.getDate() + 6));
+	  
+		  let formattedStartDate = this.formatDate(wkStart); // Format start date
+		  let formattedEndDate = this.formatDate(wkEnd); // Format end date
+	  
+		  let validityString = `Gültig ab ${formattedStartDate} bis ${formattedEndDate}`;
+	  
+		  // Make a GET request to the URL
+		  const response = await axios.get('https://www.edeka.de/api/offers?limit=999');
+		  const offers = response.data.offers;
+	  
+		  const discountItems = offers.map(offer => {
+				return {
+			  supermarket: 'edeka',
+			  period: validityString,
+			  description: offer.description,
+			  product: offer.title,
+			  img_url: offer.images.original,
+			  price: offer.price.value + ' €',
+			  posted: false
+				};
+		  });
+	  
+		  for (const di of discountItems) {
+				const exists = await this.isDiscountExists(di.product, di.period);
+	  
+				if (!exists) {
+			  const discount = new Discount(di);
+			  await discount.save();
+				}
+		  }
+	  
+		  res.status(200);
+		  return { type: true, data: discountItems, message: 'Discounts saved in DB' };
+		}
+		catch (error) {
+		  console.log('Error:', error);
+		  res.status(500);
+		  return { type: false, data: {}, message: 'Error retrieving discounts' };
+		}
+	}
+	
+	static async clear() {
+		const res = await Discount.deleteMany({posted: true});
+		return { type: true, data: res, message: 'Removed posted ones' };		
 	}
 
 }
