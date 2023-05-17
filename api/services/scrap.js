@@ -114,7 +114,7 @@ class ScrapService {
 
 		if (!exists) {
 			res.status(200);
-			return { type: true, data: 5, message: 'Discounts saved in DB' };		
+			return { type: true, data: discountItems, message: 'Discounts saved in DB' };		
 		}
 		else {
 			res.status(400);

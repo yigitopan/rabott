@@ -37,7 +37,7 @@ class InstagramPoster {
 
 			/////////////////////
 			let cData = JSON.stringify({
-				caption: 'Das ist mein das allererste automatisierte Carousel-Post mit Caption!',
+				caption: '#rabatt #rewe #aldi #edeka #lidl',
 				media_type: 'CAROUSEL',
 				children: containerIDs,
 				access_token: process.env.INSTA_TOKEN
@@ -78,6 +78,8 @@ class InstagramPoster {
 		  }
 		catch (error) {
 			console.error(error);
+			console.error('---');
+			console.error(error.response.data.error);
 			return { type: false, message: 'Error' };
 		  }
 		  
