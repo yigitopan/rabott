@@ -47,6 +47,21 @@ class Scrap {
 		}
 	}
 
+	static async aldisued(req, res) {
+		try {
+			const result = await ScrapService.aldisued(req, res);
+			if (result.type) {
+				return res.json({ data: result.data, type: true, message: result.message });
+			}
+			else {
+				return res.json({ type: false, message: result.message });
+			}
+		}
+		catch (error) {
+			return res.json({ type: false, message: error.message });
+		}
+	}
+
 	static async clear(req, res) {
 		try {
 			const result = await ScrapService.clear(req, res);

@@ -24,12 +24,12 @@ class ScrapService {
 				}, scrollDelay);
 		  });
 		});
-	  }
+	}
 	  
 	static async isDiscountExists(product, period) {
 		const existingDiscount = await Discount.findOne({ product, period });
 		return existingDiscount !== null;
-	  }
+	}
 
 	static formatDate(date) {
 		let day = date.getDate();
@@ -41,7 +41,7 @@ class ScrapService {
 		month = month < 10 ? `0${month}` : month;
 	  
 		return `${day}.${month}.${year}`;
-	  }
+	}
 
 	static async rewe(req, res) {
 		const browser = await puppeteer.launch();
@@ -270,6 +270,50 @@ class ScrapService {
 		  res.status(500);
 		  return { type: false, data: {}, message: 'Error retrieving discounts' };
 		}
+	}
+
+	static async aldisued() {
+		const browser = await puppeteer.launch();
+		const page = await browser.newPage();
+		await page.goto('https://www.aldi-sued.de/de/angebote/preisaktion.html');
+
+		const figures = await page.$$('figure');
+		const products = [];
+
+		for (const figure of figures) {
+			const pElement = await figure.$('p[style="color: rgb(197,23,24);font-weight: bold;font-size: 25.0px;"]');
+			if (!pElement) {
+				continue; // Skip figures without the desired <p> element
+			}
+
+			const figcaption = await pElement.$x('ancestor::figcaption');
+			const img = await figure.$('img');
+			const imgSrc = await img.evaluate((node) => node.getAttribute('data-srcset').split(' ')[0]);
+
+			const h3Element = await figcaption[0].$('h3');
+			const title = await h3Element.evaluate((node) => node.textContent.trim());
+
+			const descriptionElement = await figcaption[0].$('p[style="font-size: 11.0px;"]');
+			const description = descriptionElement ? await descriptionElement.evaluate((node) => node.textContent.trim()) : '';
+
+			const priceElement = await figcaption[0].$('p[style="color: rgb(197,23,24);font-weight: bold;font-size: 25.0px;"]');
+			const priceText = await priceElement.evaluate((node) => node.childNodes[0].textContent.trim());
+
+			products.push({
+				supermarket: 'aldisued',
+				period: '',
+				description: description,
+				product: title,
+				img_url: imgSrc,
+				price: priceText.slice(0, -1),
+				posted: false
+			});
+		}
+
+		console.log(products);
+
+		await browser.close();
+		return { type: true, data: products, message: 'SUED' };		
 	}
 	
 	static async clear() {
