@@ -2,6 +2,8 @@
 
 Rabott is a backend server for the Rabott Instagram discount bot. It handles the image generation, data retrieval, processing, and storage functionalities for the bot.
 
+Check Rabott's Instagram account [@KumpelRabott](https://www.instagram.com/kumpelrabott/)
+
 ## Features
 
 - Fetches discount data from the Edeka, Rewe & Lidl using Puppeteer.
